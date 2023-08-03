@@ -4,6 +4,12 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Import the user routes
+const apiRoutes = require('./routes/api_routes');
+
+// Use the user routes
+app.use('/api/users', apiRoutes);
+
 // Connect to MongoDB (replace 'your_mongodb_uri' with your actual MongoDB URI)
 mongoose.connect('your_mongodb_uri', {
   useNewUrlParser: true,

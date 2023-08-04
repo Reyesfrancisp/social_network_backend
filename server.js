@@ -10,8 +10,8 @@ const apiRoutes = require('./routes/api_routes');
 // Use the user routes
 app.use('/api/users', apiRoutes);
 
-// Connect to MongoDB (replace 'your_mongodb_uri' with your actual MongoDB URI)
-mongoose.connect('your_mongodb_uri', {
+// Connect to MongoDB
+mongoose.connect('mongodburl', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

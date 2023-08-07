@@ -25,7 +25,7 @@ const seedData = async () => {
         await Thought.deleteMany({});
 
         // Create an array of user objects with random usernames and emails
-        const users = Array.from({ length: 10 }, () => ({
+        const users = Array.from({ length: 5 }, () => ({
             username: faker.internet.userName(),
             email: faker.internet.email(),
         }));
@@ -35,7 +35,7 @@ const seedData = async () => {
 
         // Create thoughts for each user
         for (let user of createdUsers) {
-            const numThoughts = Math.floor(Math.random() * 5) + 1; // Random number of thoughts (1 to 5)
+            const numThoughts = Math.floor(Math.random() * 3) + 1; // Random number of thoughts (1 to 3)
             for (let i = 0; i < numThoughts; i++) {
                 await Thought.create({
                     thoughtText: faker.lorem.sentence(),

@@ -101,4 +101,66 @@ router.delete('/:thoughtId', async (req, res) => {
   }
 });
 
+// POST endpoint to create a reaction for a specific thought
+router.post('/', async (req, res) => {
+    try {
+      const thoughtId = req.params.thoughtId;
+      const { reactionBody, username } = req.body;
+  
+      // Find the thought by its _id
+      const thought = await Thought.findById(thoughtId);
+  
+      if (!thought) {
+        return res.status(404).json({ message: 'Thought not found' });
+      }
+  
+      // Create the reaction and add it to the thought's reactions array
+      const reaction = {
+        reactionBody,
+        username,
+      };
+  
+      thought.reactions.push(reaction);
+      await thought.save();
+  
+      return res.status(201).json(reaction);
+    } catch (error) {
+      console.error('Error creating reaction:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+  
+  // DELETE endpoint to remove a reaction by its reactionId value
+  router.delete('/:reactionId', async (req, res) => {
+    try {
+      const thoughtId = req.params.thoughtId;
+      const reactionId = req.params.reactionId;
+  
+      // Find the thought by its _id
+      const thought = await Thought.findById(thoughtId);
+  
+      if (!thought) {
+        return res.status(404).json({ message: 'Thought not found' });
+      }
+  
+      // Find the index of the reaction to remove
+      const reactionIndex = thought.reactions.findIndex(
+        (reaction) => reaction.reactionId.toString() === reactionId
+      );
+  
+      if (reactionIndex === -1) {
+        return res.status(404).json({ message: 'Reaction not found' });
+      }
+  
+      // Remove the reaction from the thought's reactions array
+      thought.reactions.splice(reactionIndex, 1);
+      await thought.save();
+  
+      return res.status(200).json({ message: 'Reaction removed successfully' });
+    } catch (error) {
+      console.error('Error removing reaction:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
 module.exports = router;

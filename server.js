@@ -11,16 +11,6 @@ const thoughtRoutes = require("./routes/thought_routes");
 app.use("/api/users", userRoutes);
 app.use("/api/thoughts", thoughtRoutes);
 
-//middleware
-userSchema.pre("remove", async function (next) {
-  try {
-    await Thought.deleteMany({ username: this.username });
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
 // Connect to MongoDB
 db.once("open", () => {
   app.listen(PORT, () => console.log("Server started on port %s", PORT));

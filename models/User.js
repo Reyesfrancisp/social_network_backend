@@ -34,6 +34,16 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+//middleware
+userSchema.pre("remove", async function (next) {
+  try {
+    await Thought.deleteMany({ username: this.username });
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Create the User model using the schema
 const User = mongoose.model('User', userSchema);
 

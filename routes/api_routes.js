@@ -28,5 +28,47 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 
+// Route to add a new user
+router.post('/user', async (req, res) => {
+  try {
+    const newUser = await User.create(req.body);
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding user' });
+  }
+});
+
+// Route to delete a user by ID
+router.delete('/user/:id', async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting user' });
+  }
+});
+
+// Route to edit a user by ID
+router.put('/user/:id', async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // Return the updated user
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating user' });
+  }
+});
+
 
 module.exports = router;

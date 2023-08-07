@@ -8,7 +8,7 @@ const db = require('./db/connection');
 const apiRoutes = require('./routes/api_routes');
 
 // Use the user routes
-app.use('/api/users', apiRoutes);
+app.use('/api', apiRoutes);
 
 // Connect to MongoDB
 db.once('open', () => {

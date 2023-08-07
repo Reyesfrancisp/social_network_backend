@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 // Reaction Schema (Subdocument)
@@ -56,13 +56,13 @@ const thoughtSchema = new Schema(
 );
 
 // Create a virtual `reactionCount`
-thoughtSchema.virtual('reactionCount').get(function () {
+thoughtSchema.virtual("reactionCount").get(function () {
   // `this` refers to the current Thought document.
   // Here, you can return the length of the reactions array for the current thought.
   return this.reactions.length;
 });
 
 // Create the Thought model using the schema
-const Thought = mongoose.model('Thought', thoughtSchema);
+const Thought = mongoose.model("Thought", thoughtSchema);
 
 module.exports = Thought;

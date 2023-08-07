@@ -1,10 +1,10 @@
 // Import necessary modules
 const express = require("express");
 const router = express.Router();
-const {User, Thought, reactionSchema } = require("../models"); 
+const {User, Thought} = require("../models"); 
 
 // Route to get all users
-router.get('/user', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const users = await User.find({}); // Empty object to find all users
 
@@ -15,7 +15,7 @@ router.get('/user', async (req, res) => {
 });
 
 // Route to get a single user by ID
-router.get('/user/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -29,7 +29,7 @@ router.get('/user/:id', async (req, res) => {
 });
 
 // Route to add a new user
-router.post('/user', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const newUser = await User.create(req.body);
     res.status(201).json(newUser);
@@ -39,7 +39,7 @@ router.post('/user', async (req, res) => {
 });
 
 // Route to delete a user by ID
-router.delete('/users/:userId', async (req, res) => {
+router.delete('/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
 
@@ -61,7 +61,7 @@ router.delete('/users/:userId', async (req, res) => {
 });
 
 // Route to edit a user by ID
-router.put('/user/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true, // Return the updated user
@@ -77,7 +77,7 @@ router.put('/user/:id', async (req, res) => {
   }
 });
 
-router.post('/users/:userId/friends/:friendId', async (req, res) => {
+router.post('/:userId/friends/:friendId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const friendId = req.params.friendId;
@@ -106,7 +106,7 @@ router.post('/users/:userId/friends/:friendId', async (req, res) => {
   }
 });
 
-router.delete('/users/:userId/friends/:friendId', async (req, res) => {
+router.delete('/:userId/friends/:friendId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const friendId = req.params.friendId;
@@ -134,5 +134,7 @@ router.delete('/users/:userId/friends/:friendId', async (req, res) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+
 
 module.exports = router;

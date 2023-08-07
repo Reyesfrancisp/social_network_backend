@@ -1,10 +1,10 @@
 // seed.js
-const db = require('./connection');
-const faker = require('faker');
-const { User, Thought } = require('../models'); // Assuming your models are exported like this
+const db = require("./connection");
+const faker = require("faker");
+const { User, Thought } = require("../models"); // Assuming your models are exported like this
 
-db.once('open', async () => {
-    console.log('db connected!');
+db.once("open", async () => {
+    console.log("db connected!");
     // Run the seed data function
     await User.deleteMany({});
     await Thought.deleteMany({});
@@ -53,9 +53,9 @@ const seedData = async () => {
             await user.save();
         }
 
-        console.log('Seed data successfully added!');
+        console.log("Seed data successfully added!");
     } catch (error) {
-        console.error('Error seeding data:', error);
+        console.error("Error seeding data:", error);
     } finally {
         // Close the connection to the database
         process.exit();

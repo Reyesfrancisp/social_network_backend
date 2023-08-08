@@ -92,7 +92,7 @@ router.delete("/:thoughtId", async (req, res) => {
     await User.findByIdAndUpdate(thought.userId, { $pull: { thoughts: thoughtId } });
 
     // Delete the thought
-    await thought.remove();
+    await Thought.findByIdAndRemove(thoughtId);
 
     return res.status(200).json({ message: "Thought removed successfully" });
   } catch (error) {

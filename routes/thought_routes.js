@@ -1,42 +1,42 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { User, Thought } = require('../models');
+const { User, Thought } = require("../models");
 
 // GET all thoughts
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const thoughts = await Thought.find();
     return res.status(200).json(thoughts);
   } catch (error) {
-    console.error('Error fetching thoughts:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error fetching thoughts:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 // GET a single thought by its _id
-router.get('/:thoughtId', async (req, res) => {
+router.get("/:thoughtId", async (req, res) => {
   try {
     const thoughtId = req.params.thoughtId;
     const thought = await Thought.findById(thoughtId);
     if (!thought) {
-      return res.status(404).json({ message: 'Thought not found' });
+      return res.status(404).json({ message: "Thought not found" });
     }
     return res.status(200).json(thought);
   } catch (error) {
-    console.error('Error fetching thought:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error fetching thought:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 // POST to create a new thought
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { thoughtText, username, userId } = req.body;
 
     // Check if the associated user exists in the database
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Create the thought
@@ -45,19 +45,19 @@ router.post('/', async (req, res) => {
       username,
     });
 
-    // Push the created thought's _id to the associated user's thoughts array field
+    // Push the created thought"s _id to the associated user"s thoughts array field
     user.thoughts.push(thought._id);
     await user.save();
 
     return res.status(201).json(thought);
   } catch (error) {
-    console.error('Error creating thought:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error creating thought:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 // PUT to update a thought by its _id
-router.put('/:thoughtId', async (req, res) => {
+router.put("/:thoughtId", async (req, res) => {
   try {
     const thoughtId = req.params.thoughtId;
     const { thoughtText } = req.body;
@@ -66,18 +66,18 @@ router.put('/:thoughtId', async (req, res) => {
     const thought = await Thought.findByIdAndUpdate(thoughtId, { thoughtText }, { new: true });
 
     if (!thought) {
-      return res.status(404).json({ message: 'Thought not found' });
+      return res.status(404).json({ message: "Thought not found" });
     }
 
     return res.status(200).json(thought);
   } catch (error) {
-    console.error('Error updating thought:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error updating thought:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 // DELETE to remove a thought by its _id
-router.delete('/:thoughtId', async (req, res) => {
+router.delete("/:thoughtId", async (req, res) => {
   try {
     const thoughtId = req.params.thoughtId;
 
@@ -85,24 +85,24 @@ router.delete('/:thoughtId', async (req, res) => {
     const thought = await Thought.findById(thoughtId);
 
     if (!thought) {
-      return res.status(404).json({ message: 'Thought not found' });
+      return res.status(404).json({ message: "Thought not found" });
     }
 
-    // Remove the thought from the associated user's thoughts array field
+    // Remove the thought from the associated user"s thoughts array field
     await User.findByIdAndUpdate(thought.userId, { $pull: { thoughts: thoughtId } });
 
     // Delete the thought
     await thought.remove();
 
-    return res.status(200).json({ message: 'Thought removed successfully' });
+    return res.status(200).json({ message: "Thought removed successfully" });
   } catch (error) {
-    console.error('Error removing thought:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error removing thought:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 // POST endpoint to create a reaction for a specific thought
-router.post('/', async (req, res) => {
+router.post("/:thoughtId/reactions", async (req, res) => {
     try {
       const thoughtId = req.params.thoughtId;
       const { reactionBody, username } = req.body;
@@ -111,10 +111,10 @@ router.post('/', async (req, res) => {
       const thought = await Thought.findById(thoughtId);
   
       if (!thought) {
-        return res.status(404).json({ message: 'Thought not found' });
+        return res.status(404).json({ message: "Thought not found" });
       }
   
-      // Create the reaction and add it to the thought's reactions array
+      // Create the reaction and add it to the thought"s reactions array
       const reaction = {
         reactionBody,
         username,
@@ -125,13 +125,13 @@ router.post('/', async (req, res) => {
   
       return res.status(201).json(reaction);
     } catch (error) {
-      console.error('Error creating reaction:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
+      console.error("Error creating reaction:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
   });
   
   // DELETE endpoint to remove a reaction by its reactionId value
-  router.delete('/:reactionId', async (req, res) => {
+  router.delete("/:thoughtId/reactions/:reactionId", async (req, res) => {
     try {
       const thoughtId = req.params.thoughtId;
       const reactionId = req.params.reactionId;
@@ -140,7 +140,7 @@ router.post('/', async (req, res) => {
       const thought = await Thought.findById(thoughtId);
   
       if (!thought) {
-        return res.status(404).json({ message: 'Thought not found' });
+        return res.status(404).json({ message: "Thought not found" });
       }
   
       // Find the index of the reaction to remove
@@ -149,17 +149,17 @@ router.post('/', async (req, res) => {
       );
   
       if (reactionIndex === -1) {
-        return res.status(404).json({ message: 'Reaction not found' });
+        return res.status(404).json({ message: "Reaction not found" });
       }
   
-      // Remove the reaction from the thought's reactions array
+      // Remove the reaction from the thought"s reactions array
       thought.reactions.splice(reactionIndex, 1);
       await thought.save();
   
-      return res.status(200).json({ message: 'Reaction removed successfully' });
+      return res.status(200).json({ message: "Reaction removed successfully" });
     } catch (error) {
-      console.error('Error removing reaction:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
+      console.error("Error removing reaction:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
   });
 

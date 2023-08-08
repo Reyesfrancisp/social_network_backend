@@ -7,6 +7,10 @@ const db = require("./db/connection");
 // Import the user routes
 const userRoutes = require("./routes/user_routes");
 const thoughtRoutes = require("./routes/thought_routes");
+
+
+app.use(express.json()); // Add this line to enable body parsing for JSON requests
+
 // Use the user routes
 app.use("/api/users", userRoutes);
 app.use("/api/thoughts", thoughtRoutes);
